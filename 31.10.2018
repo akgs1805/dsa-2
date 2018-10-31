@@ -1,0 +1,134 @@
+#include <stdio.h>
+
+struct Customer
+{
+    char customername[20];
+    int  customerid;
+    int  customerage;
+    char customergender[20];
+    double  customerphonenumber;
+    char customeraddress[40];
+    float customercredit;
+    float customerdebit;
+    float customerbalance;
+    struct Customer *link;
+}
+typedef struct Customer *CUSTOMER;
+
+CUSTOMER insertcustomer(CUSTOMER cd)
+{
+        CUSTOMER temp=NULL,current=NULL;
+        temp=(CUSTOMER*)malloc(sizeof(CUSTOMER));
+                if(temp!=NULL)
+                {
+                        printf("Please Enter Your name");
+                        gets(temp->customername);
+                        printf("Please Enter Your Id");
+                        scanf("%d",&temp->customerid);
+                        printf("Please Enter Your Age");
+                        scanf("%d",&temp->customerage);
+                        printf("Please Enter Your Gender");
+                        gets(temp->customergender);
+                        printf("Please Enter Your Phone number");
+                        scanf("%lf",&temp->customerphonenumber);
+                        printf("Please Enter Your Address");
+                        gets(temp->customeraddress);
+                        temp->link=NULL;
+                        if(cd==NULL)
+                        {
+                                return temp;
+                        }
+                        else
+                        {
+                                current=cd;
+                                while(current->link!=NULL)
+                                current=current->link;
+                                current->link=temp;
+                                return temp;
+                        }
+                }
+                else
+                {
+                        printf("\n INSUFFIENT MEMORY");
+                        exit(0);
+                }//End of Function Insert.
+}
+
+CUSTOMER deletecustomer(int id,CUSTOMER cd)
+{
+        if(cd==NULL)
+        {
+                printf("NO CUSTOMERS TO DELETE");
+                return NULL;
+        }
+        else if(cd->link==NULL)
+        {
+                if(id==cd->id)
+                {
+                        if(cd->balance==0)
+                        {
+                                free(cd);
+                                printf("THANKS FOR SHOPPING WITH US");
+                                return NULL;
+                        }
+                        else
+                        {
+                                printf("BALANCE IS NOT CLEARED");
+                                printf("BALANCE = %d ",cd->balance);
+                        }
+                }
+        }
+
+        else if(cd->id==id)
+        {
+                CUSTOMER current=cd;
+                if(cd->balance==0)
+                {
+                        cd=cd->link;
+                        free(current);
+                        return cd;
+                        printf("THANKS FOR SHOPPING WITH US");
+                }
+                else
+                {
+                        printf("BALANCE IS NOT CLEARED");
+                        printf("BALANCE = %d ",cd->balance);
+                }
+        }
+
+        else
+        {
+                CUSTOMER current=cd,previous;
+                while(current!=NULL)
+                {
+                        if(id==current->id)
+                                break;
+                        else
+                        {
+                                previous=current;
+                                current=current->link;
+                         }
+                }
+                if(current->link==NULL)
+                {
+                        printf("CUSTOMER NOT FOUND");
+                        return cd;
+                }
+                else
+                {
+                        if(current->balance==0)
+                       {
+                                previous->link=current->link;
+                                free(current);
+                                return cd;
+                                printf("THANKS FOR SHOPPING WITH US");
+                        }
+                        else
+                        {
+                                printf("BALANCE IS NOT CLEARED");
+                                printf("BALANCE = %d ",cd->balance);
+                        }
+                }
+        }
+}
+
